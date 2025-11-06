@@ -1,0 +1,1 @@
+C:\opt\Java\jdk-14.0.2\bin\java.exe "-javaagent:C:\opt\JetBrains\IntelliJ IDEA 2020.1.4
