@@ -1,27 +1,45 @@
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import static java.nio.file.Files.walk;
 
 public class TextShifter {
     public static void main(String [] args) throws IOException {
-        String source = readFile();
-        Map<Character, Character> charMap = populateMap();
-//        Map<Character, Character> charMap = populateReversedMap();
-        char[] result = source.toCharArray();
-        for (int i = 0; i < result.length; i++) {
-            if(charMap.containsKey(result[i])) {
-                result[i] = charMap.get(result[i]);
+//        String path = "<ABSOLUTE_PATH>";
+        List<String> paths = List.of(
+                "ABSOLUTE-PATHS..."
+        );
+
+        for (String path: paths) {
+
+            String source = readFile(path);
+            Map<Character, Character> charMap = populateMap();
+//            Map<Character, Character> charMap = populateReversedMap();
+            char[] result = source.toCharArray();
+            for (int i = 0; i < result.length; i++) {
+                if(charMap.containsKey(result[i])) {
+                    result[i] = charMap.get(result[i]);
+                }
             }
+            String destString = new String(result);
+            writeToFile(path, destString);
+
+            System.out.println(destString);
         }
-        String destString = new String(result);
-        System.out.println(destString);
+
+
     }
 
-    private static String readFile() throws IOException {
-        String path = "<ABSOLUTE_PATH>";
+    private static String readFile(String path) throws IOException {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(path))) {
             String line;
@@ -31,6 +49,14 @@ public class TextShifter {
             }
         }
         return content.toString();
+    }
+
+    private static void writeToFile(String path, String content) {
+        try (BufferedWriter w = Files.newBufferedWriter(Paths.get(path))) {
+            w.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Map<Character, Character> populateMap() {
